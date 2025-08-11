@@ -266,8 +266,9 @@
 
             if (!firebaseConfig || !firebaseConfig.apiKey) {
                 console.error("Firebase configuration is missing or invalid.");
+                // This alert is a fallback. The new init logic should prevent this.
                 alert("CRITICAL ERROR: Firebase configuration is not available. The application cannot start.");
-                return;
+                return false; // Indicate failure
             }
 
             try {
@@ -286,6 +287,7 @@
                     userId = auth.currentUser.uid;
                     console.log("Firebase initialized and user signed in anonymously (fallback):", userId);
                 }
+                return true; // Indicate success
 
             } catch (error) {
                 console.error("Firebase Initialization Error:", error);
@@ -294,6 +296,7 @@
                 } else {
                     alert("Could not connect to the game servers. Please check the console for details.");
                 }
+                return false; // Indicate failure
             }
         }
 
@@ -404,7 +407,8 @@
                 if(gameMode === 'single') {
                     startSinglePlayerGame();
                 } else if (gameMode === 'friends' && currentRoomId) {
-                    const roomRef = doc(db, "rooms", currentRoomId);
+                    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+                    const roomRef = doc(db, "artifacts", appId, "public/data/rooms", currentRoomId);
                     updateDoc(roomRef, { 
                         gameSettings,
                         gameState: 'starting' 
@@ -840,13 +844,21 @@
         }
 
         // --- Initial Load ---
-        window.onload = async () => {
-            await initializeFirebase();
-            if (auth.currentUser) {
+        async function startApp() {
+            const success = await initializeFirebase();
+            if (success) {
                 setupListeners();
                 showScreen('home-screen');
             }
-        };
+        }
+
+        const checkInterval = setInterval(() => {
+            // Wait for the platform to inject the config and token
+            if (typeof __firebase_config !== 'undefined' && typeof __initial_auth_token !== 'undefined') {
+                clearInterval(checkInterval);
+                startApp();
+            }
+        }, 100); // Check every 100ms
 
         window.addEventListener('beforeunload', (event) => {
             if (currentRoomId) {
