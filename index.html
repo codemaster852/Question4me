@@ -9,76 +9,115 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* --- Animation & Base Styles --- */
+        /* --- Base & Animation Styles --- */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
         @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            0%, 100% { transform: scale(1); box-shadow: 0 0 15px var(--glow-color); }
+            50% { transform: scale(1.05); box-shadow: 0 0 25px var(--glow-color); }
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes background-pan {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 20px;
+            background-color: var(--color);
+            opacity: 0.7;
+            animation: confetti-fall 5s linear infinite;
+        }
+        @keyframes confetti-fall {
+            0% { transform: translateY(-10vh) rotateZ(0deg); }
+            100% { transform: translateY(110vh) rotateZ(360deg); }
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #0f172a; /* bg-slate-900 */
-            background-image: 
-                radial-gradient(circle at 25% 25%, hsla(215, 98%, 52%, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 75% 75%, hsla(339, 80%, 50%, 0.1) 0%, transparent 50%);
-            background-size: 100% 100%;
+            background-color: #0c0a18; /* Dark purple-blue */
+            background-image:
+                radial-gradient(at 20% 20%, hsla(252, 80%, 50%, 0.2) 0px, transparent 50%),
+                radial-gradient(at 80% 20%, hsla(300, 80%, 50%, 0.2) 0px, transparent 50%),
+                radial-gradient(at 20% 80%, hsla(210, 80%, 50%, 0.2) 0px, transparent 50%),
+                radial-gradient(at 80% 80%, hsla(180, 80%, 50%, 0.2) 0px, transparent 50%);
+            background-size: 200% 200%;
+            animation: background-pan 20s linear infinite;
         }
-        .font-cairo { font-family: 'Cairo', sans-serif; }
 
-        /* --- Main Button Styling --- */
+        /* --- Improved Button Styling --- */
         .btn {
-            @apply w-full text-white font-bold py-3 px-4 rounded-xl text-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed border-b-4 shadow-lg;
+            @apply w-full text-white font-bold py-3 px-5 rounded-xl text-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed border-b-4 shadow-lg flex items-center justify-center gap-3;
             transform-style: preserve-3d;
+            background-image: linear-gradient(to right, var(--tw-gradient-from), var(--tw-gradient-to));
         }
         .btn:not(:disabled):hover {
-            @apply brightness-110;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            @apply brightness-125;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.3);
         }
         .btn:not(:disabled):active {
             transform: translateY(1px);
-            @apply border-b-2;
+            @apply border-b-2 shadow-md;
         }
-        .btn-primary { @apply bg-cyan-500 border-cyan-700; }
-        .btn-primary:not(:disabled):active { @apply bg-cyan-600; }
-
-        .btn-secondary { @apply bg-amber-500 border-amber-700; }
-        .btn-secondary:not(:disabled):active { @apply bg-amber-600; }
-
-        .btn-danger { @apply bg-red-600 border-red-800; }
-        .btn-danger:not(:disabled):active { @apply bg-red-700; }
-        
-        .btn-gray { @apply bg-slate-600 border-slate-800 text-slate-200; }
-        .btn-gray.active { @apply bg-cyan-500 border-cyan-700 text-white ring-2 ring-cyan-300; }
-
-        /* --- Choice Button Styling --- */
-        .btn-choice {
-            @apply w-full p-4 rounded-xl text-lg text-left transition-all duration-200 border-2 border-slate-600 bg-slate-700;
-        }
-        .btn-choice:hover:not(:disabled) {
-            @apply bg-slate-600 border-cyan-400;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 200, 255, 0.1);
-        }
-        .correct {
-            background-image: linear-gradient(to right, #28a745, #22c55e) !important;
-            color: white !important;
-            border-color: #166534 !important;
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
-        }
-        .incorrect {
-            background-image: linear-gradient(to right, #dc3545, #ef4444) !important;
-            color: white !important;
-            border-color: #991b1b !important;
-            opacity: 0.8;
+        .btn-primary { --tw-gradient-from: #2563eb; --tw-gradient-to: #3b82f6; @apply border-blue-800; }
+        .btn-secondary { --tw-gradient-from: #d97706; --tw-gradient-to: #f59e0b; @apply border-amber-800; }
+        .btn-danger { --tw-gradient-from: #dc2626; --tw-gradient-to: #ef4444; @apply border-red-800; }
+        .btn-success { --tw-gradient-from: #16a34a; --tw-gradient-to: #22c55e; @apply border-green-800; }
+        .btn-gray { @apply from-slate-600 to-slate-700 border-slate-800 text-slate-200; }
+        .btn-gray.active {
+             --tw-gradient-from: #0891b2; --tw-gradient-to: #06b6d4;
+            @apply border-cyan-700 text-white ring-2 ring-cyan-300 shadow-cyan-500/50 shadow-lg;
         }
 
-        /* --- Loader & Screen Transitions --- */
+        /* --- UI Element Styling (Cyber/Glassmorphism) --- */
+        #app-container {
+            @apply bg-slate-900/60 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-6 md:p-8 shadow-2xl shadow-black/50 relative overflow-hidden;
+        }
+        #lang-switcher {
+            @apply absolute top-4 right-4 bg-slate-900/50 p-1 rounded-lg border border-slate-700 z-20;
+        }
+        #lobby-code {
+            @apply bg-slate-900/70 border-2 border-dashed border-cyan-400 text-cyan-300 flex items-center justify-center gap-4;
+            text-shadow: 0 0 8px theme('colors.cyan.500');
+        }
+        input[type="text"], input[type="number"] {
+            @apply w-full p-4 bg-slate-900/70 border-2 border-slate-600 rounded-xl text-lg text-center text-white placeholder-slate-400;
+            @apply focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all;
+        }
+        #game-timer {
+            --glow-color: theme('colors.amber.500/0.7');
+            animation: pulse 1.5s infinite ease-in-out;
+            text-shadow: 0 0 15px var(--glow-color);
+        }
+        .screen { display: none; animation: fadeIn 0.5s ease-out forwards; }
+        .screen.active { display: block; }
+
+        /* --- Specific Screen Enhancements --- */
+        .title-glow {
+            text-shadow: 0 0 5px theme('colors.cyan.400'), 0 0 15px theme('colors.cyan.500'), 0 0 30px theme('colors.cyan.600');
+        }
+        #player-list li {
+            @apply bg-slate-800/50 border border-slate-700 rounded-lg p-3 text-lg flex items-center justify-between;
+            animation: fadeIn 0.3s ease-out;
+        }
+        #game-area {
+            @apply bg-slate-900/60 border border-slate-700;
+        }
+        .player-pod {
+            @apply bg-slate-800/70 p-3 rounded-xl border border-slate-700 text-center w-full;
+        }
+        .feedback-correct { @apply text-green-400; text-shadow: 0 0 10px theme('colors.green.500'); }
+        .feedback-incorrect { @apply text-red-400; text-shadow: 0 0 10px theme('colors.red.500'); }
+
+        /* --- Loader --- */
         .loader {
             border: 6px solid #475569; /* slate-600 */
             border-radius: 50%;
@@ -87,106 +126,116 @@
             height: 60px;
             animation: spin 1s linear infinite;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .screen {
-            display: none;
-            animation: fadeIn 0.5s ease-out;
-        }
-        .screen.active { display: block; }
-        
-        /* --- UI Element Styling (Glassmorphism) --- */
-        #app-container {
-            @apply bg-slate-800/50 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-6 md:p-8 shadow-2xl shadow-black/50;
-        }
-        #game-area {
-            @apply bg-slate-900/60 border border-slate-700;
-        }
-        #lobby-code {
-            @apply bg-slate-900 border-2 border-dashed border-slate-600 text-amber-400;
-        }
-        input[type="text"], input[type="number"] {
-            @apply w-full p-4 bg-slate-900/70 border-2 border-slate-600 rounded-xl text-lg text-center;
-            @apply focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all;
-        }
-        #game-timer {
-            animation: pulse 1.5s infinite;
-        }
     </style>
 </head>
-<body class="bg-slate-900 text-white flex items-center justify-center min-h-screen p-4">
+<body class="text-white flex items-center justify-center min-h-screen p-4">
 
     <div id="app-container" class="w-full max-w-2xl mx-auto">
+        <div id="confetti-container"></div>
+        <div id="lang-switcher" class="flex space-x-1">
+            <button id="lang-en" class="lang-btn active px-3 py-1 rounded-md text-sm font-semibold transition-colors">EN</button>
+            <button id="lang-ar" class="lang-btn px-3 py-1 rounded-md text-sm font-semibold transition-colors">AR</button>
+        </div>
 
         <!-- Home Screen -->
         <div id="home-screen" class="screen active text-center">
-            <h1 class="text-5xl font-bold text-cyan-400 mb-2">Question4me</h1>
-            <p class="text-xl text-slate-400 mb-8 font-cairo">اسألني</p>
-            <div class="space-y-4">
-                <button id="single-player-btn" class="btn btn-primary">Single Player</button>
-                <button id="friends-mode-btn" class="btn btn-secondary">Friends Mode</button>
+            <h1 class="text-6xl font-bold text-cyan-400 mb-2 title-glow" data-key="title">Question4me</h1>
+            <p class="text-xl text-slate-300 mb-10 font-cairo" data-key="subtitle">اسألني</p>
+            <div class="space-y-5">
+                <button id="single-player-btn" class="btn btn-primary" data-key="singlePlayer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Single Player
+                </button>
+                <button id="friends-mode-btn" class="btn btn-secondary" data-key="friendsMode">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    Friends Mode
+                </button>
             </div>
         </div>
 
         <!-- Friends Mode Screen -->
         <div id="friends-mode-screen" class="screen text-center">
-            <h2 class="text-4xl font-bold text-amber-400 mb-8">Friends Mode</h2>
+            <h2 class="text-4xl font-bold text-amber-400 mb-8 title-glow" data-key="friendsMode">Friends Mode</h2>
             <div class="space-y-4">
-                <button id="create-room-btn" class="btn btn-primary">Create Room</button>
-                <div class="bg-slate-800 p-4 rounded-lg">
-                    <input type="text" id="room-code-input" placeholder="Enter Room Code">
-                    <button id="join-room-btn" class="btn btn-secondary mt-3">Join Room</button>
-                </div>
-                 <button id="back-to-home-btn-1" class="btn btn-danger mt-4">Back</button>
-            </div>
-        </div>
-        
-        <!-- Game Settings Screen -->
-        <div id="game-settings-screen" class="screen text-center">
-            <h2 class="text-4xl font-bold text-cyan-400 mb-8">Game Settings</h2>
-            <p class="text-slate-300 mb-6 -mt-4">Each question has a 10 second time limit!</p>
-            <div class="space-y-6">
-                <div>
-                    <h3 class="text-2xl mb-3">Game Mode</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <button class="game-mode-btn btn btn-gray" data-mode="survival">Survival</button>
-                        <button class="game-mode-btn btn btn-gray" data-mode="questions">Questions</button>
+                <button id="create-room-btn" class="btn btn-primary" data-key="createRoom">Create Room</button>
+                <div class="relative pt-8">
+                    <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                        <div class="w-full border-t border-slate-600"></div>
+                    </div>
+                    <div class="relative flex justify-center">
+                        <span class="bg-slate-900 px-4 text-slate-400">OR</span>
                     </div>
                 </div>
-                 <div id="questions-settings" class="hidden">
-                    <h3 class="text-2xl mb-3">Number of Questions</h3>
+                <div class="bg-slate-800/50 p-4 rounded-lg border border-slate-700">
+                    <input type="text" id="room-code-input" data-key-placeholder="enterRoomCodePlaceholder" class="uppercase tracking-widest font-mono">
+                    <button id="join-room-btn" class="btn btn-secondary mt-3" data-key="joinRoom">Join Room</button>
+                </div>
+                <button id="back-to-home-btn-1" class="btn btn-danger mt-4" data-key="back">Back</button>
+            </div>
+        </div>
+
+        <!-- Game Settings Screen -->
+        <div id="game-settings-screen" class="screen text-center">
+            <h2 class="text-4xl font-bold text-cyan-400 mb-2 title-glow" data-key="gameSettings">Game Settings</h2>
+            <p class="text-slate-300 mb-8" data-key="timerInfo">Each question has a 10 second time limit!</p>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-2xl mb-3 font-semibold" data-key="category">Category</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                        <button class="category-btn btn btn-gray active" data-category="General Knowledge" data-key="catGeneral">General</button>
+                        <button class="category-btn btn btn-gray" data-category="Math" data-key="catMath">Math</button>
+                        <button class="category-btn btn btn-gray" data-category="History" data-key="catHistory">History</button>
+                        <button class="category-btn btn btn-gray" data-category="Science" data-key="catScience">Science</button>
+                        <button class="category-btn btn btn-gray col-span-2 md:col-span-1 lg:col-span-1" data-category="Random" data-key="catRandom">Random</button>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-2xl mb-3 font-semibold" data-key="gameMode">Game Mode</h3>
+                    <div class="grid grid-cols-2 gap-4 max-w-md mx-auto">
+                        <button class="game-mode-btn btn btn-gray" data-mode="survival" data-key="modeSurvival">Survival</button>
+                        <button class="game-mode-btn btn btn-gray" data-mode="questions" data-key="modeQuestions">Questions</button>
+                    </div>
+                </div>
+                <div id="questions-settings" class="hidden bg-slate-800/50 p-4 rounded-lg border border-slate-700 max-w-md mx-auto">
+                    <h3 class="text-2xl mb-3 font-semibold" data-key="numQuestions">Number of Questions</h3>
                     <input type="number" id="questions-number-input" class="tracking-normal" value="10" min="1" max="50">
                 </div>
             </div>
-             <button id="start-game-btn" class="btn btn-primary mt-8" disabled>Select a Mode to Start</button>
-             <button id="back-to-home-btn-2" class="btn btn-danger mt-4">Back</button>
+            <div class="mt-8 space-y-4">
+                <button id="start-game-btn" class="btn btn-primary" disabled data-key="selectModeStart">Select a Mode to Start</button>
+                <button id="back-to-home-btn-2" class="btn btn-danger" data-key="back">Back</button>
+            </div>
         </div>
 
         <!-- Lobby Screen -->
         <div id="lobby-screen" class="screen text-center">
-            <h2 class="text-3xl font-bold text-amber-400 mb-4">Lobby</h2>
-            <p class="text-slate-400 mb-6">Share this code with your friend:</p>
-            <div id="lobby-code" class="text-5xl font-bold p-4 rounded-lg cursor-pointer mb-6" title="Click to copy"></div>
-            <p class="text-xl mb-4">Players in lobby:</p>
-            <ul id="player-list" class="text-lg space-y-2 mb-8"></ul>
-            <div id="host-controls" class="hidden my-6">
-                <button id="start-game-from-lobby-btn" class="btn btn-primary" disabled>Start Game (Need 2 players)</button>
+            <h2 class="text-3xl font-bold text-amber-400 mb-4 title-glow" data-key="lobby">Lobby</h2>
+            <p class="text-slate-300 mb-4" data-key="shareCode">Share this code with your friend:</p>
+            <div id="lobby-code" class="text-5xl font-bold font-mono tracking-widest p-4 rounded-lg cursor-pointer mb-6" title="Click to copy"></div>
+            <p class="text-xl mb-4 font-semibold" data-key="playersInLobby">Players in lobby:</p>
+            <ul id="player-list" class="space-y-2 mb-8 max-w-md mx-auto"></ul>
+            <div id="host-controls" class="hidden my-6 space-y-4">
+                <button id="start-game-from-lobby-btn" class="btn btn-primary" disabled data-key="startGameNeed2">Start Game (Need 2 players)</button>
             </div>
             <div id="waiting-message">
                 <div class="loader mx-auto"></div>
-                <p class="mt-4">Waiting for another player to join...</p>
+                <p class="mt-4 text-slate-300" data-key="waitingForPlayer">Waiting for another player to join...</p>
             </div>
-            <p id="waiting-for-host-msg" class="hidden mt-4 text-lg">Waiting for the host to start the game...</p>
+            <p id="waiting-for-host-msg" class="hidden mt-4 text-lg text-slate-300" data-key="waitingForHost">Waiting for the host to start the game...</p>
         </div>
 
         <!-- Game Screen -->
         <div id="game-screen" class="screen">
-            <header class="flex justify-between items-center mb-4">
-                <div id="player1-info" class="text-left w-1/3">
+            <header class="flex justify-between items-start gap-4 mb-4">
+                <div id="player1-info" class="player-pod w-2/5">
                     <div id="player1-name" class="text-lg font-bold text-cyan-400 truncate">Player 1</div>
                     <div id="player1-score" class="text-xl font-bold">Score: 0</div>
                 </div>
-                <div id="game-timer" class="text-5xl font-bold text-amber-400 text-center w-1/3">10</div>
-                <div id="player2-info" class="text-right w-1/3">
+                <div class="text-center flex-shrink-0">
+                    <div id="game-category" class="text-lg font-semibold text-slate-300">General</div>
+                    <div id="game-timer" class="text-6xl font-bold text-amber-400">10</div>
+                </div>
+                <div id="player2-info" class="player-pod w-2/5">
                     <div id="player2-name" class="text-lg font-bold text-red-400 truncate">Player 2</div>
                     <div id="player2-score" class="text-xl font-bold">Score: 0</div>
                 </div>
@@ -197,24 +246,35 @@
                     <div id="question-container" class="text-center">
                         <p id="question-text" class="text-2xl md:text-3xl font-semibold mb-6 leading-relaxed"></p>
                     </div>
-                    <div id="type-answer-section">
-                        <input type="text" id="answer-input" placeholder="Type your answer...">
-                        <button id="submit-answer-btn" class="btn btn-primary mt-4">Submit Answer</button>
+                    <div id="type-answer-section" class="max-w-md mx-auto">
+                        <input type="text" id="answer-input" data-key-placeholder="typeAnswerPlaceholder">
+                        <button id="submit-answer-btn" class="btn btn-primary mt-4" data-key="submitAnswer">Submit Answer</button>
                     </div>
                     <div id="feedback-message" class="text-center text-2xl font-bold mt-6"></div>
-                    <button id="next-question-btn" class="hidden btn btn-secondary mt-6">Next Question</button>
+                    <button id="next-question-btn" class="hidden btn btn-secondary mt-6 max-w-md mx-auto" data-key="nextQuestion">Next Question</button>
                 </div>
             </main>
         </div>
-        
-        <!-- Game Over Screen -->
-        <div id="game-over-screen" class="screen text-center">
-            <h2 class="text-5xl font-bold text-cyan-400 mb-6">Game Over!</h2>
-            <div id="game-over-message" class="text-3xl text-amber-400 mb-4"></div>
-            <div id="final-scores" class="text-2xl space-y-2 mb-8"></div>
-            <button id="play-again-btn" class="btn btn-primary">Play Again</button>
+
+        <!-- Second Chance Screen -->
+        <div id="second-chance-screen" class="screen text-center">
+            <h2 class="text-4xl font-bold text-amber-400 mb-4 title-glow" data-key="secondChanceTitle">Second Chance!</h2>
+            <p class="text-slate-300 mb-2" data-key="secondChanceInfo">Choose the correct answer for <span class="text-green-400 font-bold">+20</span> points.</p>
+            <p class="text-slate-300 mb-8">But be careful, a wrong answer will cost you <span class="text-red-400 font-bold">-10</span> points!</p>
+            <div id="second-chance-loader" class="loader mx-auto my-8"></div>
+            <div id="second-chance-options" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Buttons will be injected here -->
+            </div>
+            <div id="second-chance-feedback" class="text-2xl font-bold mt-6"></div>
         </div>
 
+        <!-- Game Over Screen -->
+        <div id="game-over-screen" class="screen text-center">
+            <h2 class="text-5xl font-bold text-cyan-400 mb-4 title-glow" data-key="gameOver">Game Over!</h2>
+            <div id="game-over-message" class="text-3xl text-amber-400 mb-6"></div>
+            <div id="final-scores" class="text-2xl space-y-3 mb-8 bg-slate-800/50 p-6 rounded-lg border border-slate-700 max-w-md mx-auto"></div>
+            <button id="play-again-btn" class="btn btn-primary max-w-sm mx-auto" data-key="playAgain">Play Again</button>
+        </div>
     </div>
 
     <script type="module">
@@ -235,76 +295,225 @@
         const loaderGame = document.getElementById('loader-game');
         const gameContent = document.getElementById('game-content');
         const timerEl = document.getElementById('game-timer');
-        
+        const gameCategoryEl = document.getElementById('game-category');
+        const confettiContainer = document.getElementById('confetti-container');
+
         // --- Firebase & Game State ---
         let db, auth, userId, app;
         let currentRoomId = null;
         let roomUnsubscribe = null;
         let gameMode = null; // 'single' or 'friends'
-        let gameSettings = { mode: null, value: null }; // mode: survival, questions. value: number of questions
+        let gameSettings = { mode: null, value: null, category: 'General Knowledge' }; // mode: survival, questions. value: number of questions
         let singlePlayerState = {};
         let timerInterval = null;
         let questionTimeout = null;
         let correctAnswer = '';
+        let currentLang = 'en';
+        const languageMap = {
+            en: 'English',
+            ar: 'Arabic'
+        };
 
         // --- Gemini API ---
-        const geminiApiKey = "AIzaSyD4TajBc10KGNuKJ6HBGBvkJAG4A6bam6A";
-        const geminiApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`;
+        const geminiApiKey = ""; // This is left empty as Canvas will provide the key.
+        const geminiApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${geminiApiKey}`;
+
+        // --- Translations ---
+        const translations = {
+            en: {
+                title: 'Question4me',
+                subtitle: 'Ask Me',
+                singlePlayer: 'Single Player',
+                friendsMode: 'Friends Mode',
+                createRoom: 'Create Room',
+                joinRoom: 'Join Room',
+                back: 'Back',
+                gameSettings: 'Game Settings',
+                timerInfo: 'Each question has a 10 second time limit!',
+                category: 'Category',
+                catGeneral: 'General',
+                catMath: 'Math',
+                catHistory: 'History',
+                catScience: 'Science',
+                catRandom: 'Random',
+                gameMode: 'Game Mode',
+                modeSurvival: 'Survival',
+                modeQuestions: 'Questions',
+                numQuestions: 'Number of Questions',
+                selectModeStart: 'Select a Mode to Start',
+                lobby: 'Lobby',
+                shareCode: 'Share this code with your friend:',
+                playersInLobby: 'Players in lobby:',
+                startGameNeed2: 'Start Game (Need 2 players)',
+                waitingForPlayer: 'Waiting for another player to join...',
+                waitingForHost: 'Waiting for the host to start the game...',
+                submitAnswer: 'Submit Answer',
+                nextQuestion: 'Next Question',
+                gameOver: 'Game Over!',
+                playAgain: 'Play Again',
+                enterRoomCodePlaceholder: 'Enter Room Code',
+                typeAnswerPlaceholder: 'Type your answer...',
+                correctFeedback: 'Correct! 🎉',
+                incorrectFeedback: 'Incorrect. The answer was:',
+                timeUpFeedback: "Time's up! The answer was:",
+                youWin: 'You Win!',
+                playerWins: 'wins!',
+                itsATie: "It's a tie!",
+                youRanOutOfLives: 'You ran out of lives!',
+                completedAllQuestions: 'You completed all questions!',
+                yourFinalScore: 'Your Final Score:',
+                score: 'Score',
+                lives: 'Lives',
+                question: 'Q',
+                waitingForOtherPlayer: 'Waiting for other player...',
+                proceedToSettings: 'Proceed to Settings',
+                you: '(You)',
+                host: '👑',
+                errorLoadingQuestion: 'Error loading question. Please try again.',
+                secondChanceTitle: 'Second Chance!',
+                secondChanceInfo: 'Choose the correct answer for +20 points.',
+                secondChanceWarning: 'But be careful, a wrong answer will cost you -10 points!',
+                secondChanceCorrect: 'Awesome! +20 points!',
+                secondChanceIncorrect: 'Ouch! -10 points.',
+            },
+            ar: {
+                title: 'اسألني',
+                subtitle: 'Question4me',
+                singlePlayer: 'لاعب واحد',
+                friendsMode: 'وضع الأصدقاء',
+                createRoom: 'إنشاء غرفة',
+                joinRoom: 'الانضمام لغرفة',
+                back: 'رجوع',
+                gameSettings: 'إعدادات اللعبة',
+                timerInfo: 'كل سؤال له مهلة 10 ثوان!',
+                category: 'الفئة',
+                catGeneral: 'عام',
+                catMath: 'رياضيات',
+                catHistory: 'تاريخ',
+                catScience: 'علوم',
+                catRandom: 'عشوائي',
+                gameMode: 'وضع اللعب',
+                modeSurvival: 'بقاء',
+                modeQuestions: 'أسئلة',
+                numQuestions: 'عدد الأسئلة',
+                selectModeStart: 'اختر وضعًا للبدء',
+                lobby: 'ردهة الإنتظار',
+                shareCode: 'شارك هذا الرمز مع صديقك:',
+                playersInLobby: 'اللاعبون في الردهة:',
+                startGameNeed2: 'ابدأ اللعبة (تحتاج لاعبين)',
+                waitingForPlayer: 'في انتظار انضمام لاعب آخر...',
+                waitingForHost: 'في انتظار المضيف لبدء اللعبة...',
+                submitAnswer: 'إرسال الإجابة',
+                nextQuestion: 'السؤال التالي',
+                gameOver: 'انتهت اللعبة!',
+                playAgain: 'العب مرة أخرى',
+                enterRoomCodePlaceholder: 'أدخل رمز الغرفة',
+                typeAnswerPlaceholder: 'اكتب إجابتك...',
+                correctFeedback: 'صحيح! 🎉',
+                incorrectFeedback: 'خطأ. الإجابة الصحيحة هي:',
+                timeUpFeedback: 'انتهى الوقت! الإجابة الصحيحة هي:',
+                youWin: 'أنت الفائز!',
+                playerWins: 'يفوز!',
+                itsATie: 'إنه تعادل!',
+                youRanOutOfLives: 'لقد نفذت محاولاتك!',
+                completedAllQuestions: 'لقد أكملت جميع الأسئلة!',
+                yourFinalScore: 'نتيجتك النهائية:',
+                score: 'النتيجة',
+                lives: 'محاولات',
+                question: 'س',
+                waitingForOtherPlayer: 'في انتظار اللاعب الآخر...',
+                proceedToSettings: 'الانتقال إلى الإعدادات',
+                you: '(أنت)',
+                host: '👑',
+                errorLoadingQuestion: 'خطأ في تحميل السؤال. يرجى المحاولة مرة أخرى.',
+                secondChanceTitle: 'فرصة ثانية!',
+                secondChanceInfo: 'اختر الإجابة الصحيحة لتحصل على +20 نقطة.',
+                secondChanceWarning: 'لكن كن حذرا، الإجابة الخاطئة ستكلفك -10 نقاط!',
+                secondChanceCorrect: 'رائع! +20 نقطة!',
+                secondChanceIncorrect: 'للأسف! -10 نقاط.',
+            }
+        };
 
         // --- Functions ---
-        
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('gameLanguage', lang);
+            const isRTL = lang === 'ar';
+            document.body.dir = isRTL ? 'rtl' : 'ltr';
+            document.documentElement.lang = lang;
+
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.dataset.key;
+                const buttonIcon = el.querySelector('svg');
+                if (translations[lang][key]) {
+                    // Preserve icons in buttons
+                    if (buttonIcon) {
+                        el.childNodes.forEach(node => {
+                            if (node.nodeType === Node.TEXT_NODE) {
+                                node.textContent = ` ${translations[lang][key]} `;
+                            }
+                        });
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
+                }
+            });
+
+            document.querySelectorAll('[data-key-placeholder]').forEach(el => {
+                const key = el.dataset.keyPlaceholder;
+                if (translations[lang][key]) {
+                    el.placeholder = translations[lang][key];
+                }
+            });
+
+            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+            document.getElementById('lang-ar').classList.toggle('active', lang === 'ar');
+            document.querySelectorAll('#lang-switcher .lang-btn').forEach(btn => {
+                btn.classList.remove('bg-cyan-500', 'text-white');
+            });
+            const activeLangBtn = document.querySelector('#lang-switcher .active');
+            if(activeLangBtn) activeLangBtn.classList.add('bg-cyan-500', 'text-white');
+        }
+
         function showScreen(screenId) {
             screens.forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
         }
 
         async function initializeFirebase() {
-            // Use the globally provided Firebase config by the platform
-            const firebaseConfig = typeof __firebase_config !== 'undefined' 
-                ? JSON.parse(__firebase_config) 
+            const firebaseConfig = typeof __firebase_config !== 'undefined'
+                ? JSON.parse(__firebase_config)
                 : null;
 
             if (!firebaseConfig || !firebaseConfig.apiKey) {
                 console.error("Firebase configuration is missing or invalid.");
-                // This alert is a fallback. The new init logic should prevent this.
-                alert("CRITICAL ERROR: Firebase configuration is not available. The application cannot start.");
-                return false; // Indicate failure
+                document.body.innerHTML = `<div class="text-center p-8">CRITICAL ERROR: Firebase configuration is not available. The application cannot start.</div>`;
+                return false;
             }
 
             try {
                 app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
                 auth = getAuth(app);
-                
-                // Use the globally provided auth token by the platform
+
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
-                    userId = auth.currentUser.uid;
-                    console.log("Firebase initialized and user signed in with custom token:", userId);
                 } else {
-                    // Fallback for local testing if the global token isn't available
                     await signInAnonymously(auth);
-                    userId = auth.currentUser.uid;
-                    console.log("Firebase initialized and user signed in anonymously (fallback):", userId);
                 }
-                return true; // Indicate success
+                userId = auth.currentUser.uid;
+                console.log("Firebase initialized. User ID:", userId);
+                return true;
 
             } catch (error) {
                 console.error("Firebase Initialization Error:", error);
-                if (error.code && (error.code.includes('identity-toolkit') || error.code.includes('auth/operation-not-allowed'))) {
-                    alert("AUTHENTICATION FAILED:\n\nIf you are running this locally, please ensure 'Anonymous' sign-in is enabled in your Firebase project's Authentication settings and that the Identity Toolkit API is active in your Google Cloud project.");
-                } else {
-                    alert("Could not connect to the game servers. Please check the console for details.");
-                }
-                return false; // Indicate failure
+                 document.body.innerHTML = `<div class="text-center p-8">Could not connect to the game servers. Please check the console for details.</div>`;
+                return false;
             }
         }
 
         async function callGemini(prompt) {
-            if (!geminiApiKey) {
-                 alert("Gemini API key is missing. Please add it to the script.");
-                 return null;
-            }
             const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
             try {
                 const response = await fetch(geminiApiUrl, {
@@ -313,7 +522,8 @@
                     body: JSON.stringify(payload)
                 });
                 if (!response.ok) {
-                    console.error("Gemini API Error:", response.statusText);
+                    const errorBody = await response.text();
+                    console.error("Gemini API Error:", response.status, response.statusText, errorBody);
                     return null;
                 }
                 const result = await response.json();
@@ -325,7 +535,9 @@
         }
 
         function setupListeners() {
-            // Home
+            document.getElementById('lang-en').onclick = () => setLanguage('en');
+            document.getElementById('lang-ar').onclick = () => setLanguage('ar');
+
             document.getElementById('single-player-btn').onclick = () => {
                 gameMode = 'single';
                 showScreen('game-settings-screen');
@@ -337,28 +549,27 @@
             document.getElementById('back-to-home-btn-1').onclick = () => showScreen('home-screen');
             document.getElementById('back-to-home-btn-2').onclick = () => resetToHome();
 
-            // Friends
             document.getElementById('create-room-btn').onclick = createRoom;
             document.getElementById('join-room-btn').onclick = joinRoom;
             lobbyCodeEl.onclick = () => {
-                // Use a fallback for clipboard API for security reasons in iframes
                 try {
+                    const code = lobbyCodeEl.textContent;
                     const textArea = document.createElement('textarea');
-                    textArea.value = lobbyCodeEl.innerText;
+                    textArea.value = code;
                     document.body.appendChild(textArea);
                     textArea.select();
                     document.execCommand('copy');
                     document.body.removeChild(textArea);
-                    alert('Room code copied to clipboard!');
+                    const originalText = lobbyCodeEl.innerHTML;
+                    lobbyCodeEl.innerHTML = `Copied!`;
+                    setTimeout(() => { lobbyCodeEl.innerHTML = originalText; }, 1500);
                 } catch (err) {
-                    alert('Could not copy code.');
+                     console.error('Could not copy code.', err);
                 }
             };
 
-            // Game Settings
             setupGameSettingsListeners();
-            
-            // In-Game
+
             submitAnswerBtn.onclick = handleAnswerSubmission;
             answerInput.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') handleAnswerSubmission();
@@ -367,71 +578,73 @@
             document.getElementById('play-again-btn').onclick = resetToHome;
             document.getElementById('start-game-from-lobby-btn').onclick = () => showScreen('game-settings-screen');
         }
-        
+
         function setupGameSettingsListeners() {
             const modeButtons = document.querySelectorAll('.game-mode-btn');
+            const categoryButtons = document.querySelectorAll('.category-btn');
             const startGameBtn = document.getElementById('start-game-btn');
-            
+
+            categoryButtons.forEach(btn => {
+                btn.onclick = () => {
+                    categoryButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    gameSettings.category = btn.dataset.category;
+                };
+            });
+
             modeButtons.forEach(btn => {
                 btn.onclick = () => {
                     modeButtons.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     gameSettings.mode = btn.dataset.mode;
-                    
+
                     document.getElementById('questions-settings').classList.toggle('hidden', gameSettings.mode !== 'questions');
                     
+                    startGameBtn.disabled = false;
                     if (gameSettings.mode === 'survival') {
                         gameSettings.value = 3; // 3 lives
-                        startGameBtn.disabled = false;
-                        startGameBtn.textContent = 'Start Survival Mode';
+                        startGameBtn.textContent = translations[currentLang].modeSurvival;
                     } else if (gameSettings.mode === 'questions') {
                         const qInput = document.getElementById('questions-number-input');
                         gameSettings.value = parseInt(qInput.value);
-                        const isValid = gameSettings.value > 0;
-                        startGameBtn.disabled = !isValid;
-                        startGameBtn.textContent = isValid ? 'Start Game' : 'Enter a Valid Number';
+                        startGameBtn.textContent = translations[currentLang].modeQuestions;
                     }
                 };
             });
 
             document.getElementById('questions-number-input').oninput = (e) => {
-                 if(gameSettings.mode === 'questions') {
+                if (gameSettings.mode === 'questions') {
                     gameSettings.value = parseInt(e.target.value);
-                    const isValid = gameSettings.value && gameSettings.value > 0;
-                    startGameBtn.disabled = !isValid;
-                    startGameBtn.textContent = isValid ? 'Start Game' : 'Enter a Number';
-                 }
+                }
             };
 
             startGameBtn.onclick = () => {
-                if(gameMode === 'single') {
+                if (gameMode === 'single') {
                     startSinglePlayerGame();
                 } else if (gameMode === 'friends' && currentRoomId) {
                     const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
                     const roomRef = doc(db, "artifacts", appId, "public/data/rooms", currentRoomId);
-                    updateDoc(roomRef, { 
+                    updateDoc(roomRef, {
                         gameSettings,
-                        gameState: 'starting' 
+                        gameState: 'starting'
                     });
                 }
             };
         }
-
-        // --- Multiplayer Logic ---
 
         async function createRoom() {
             const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
             const roomId = Math.random().toString(36).substring(2, 8).toUpperCase();
             currentRoomId = roomId;
             const roomRef = doc(db, "artifacts", appId, "public/data/rooms", currentRoomId);
-            
+
             const player1 = { id: userId, name: `Player ${Math.floor(Math.random() * 1000)}`, score: 0, isHost: true };
 
             await setDoc(roomRef, {
                 roomId: roomId,
                 players: { [userId]: player1 },
                 gameState: 'waiting',
-                gameSettings: null, 
+                gameSettings: null,
                 createdAt: new Date(),
             });
 
@@ -443,7 +656,7 @@
             const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
             const roomId = document.getElementById('room-code-input').value.toUpperCase();
             if (!roomId) return;
-            
+
             const roomRef = doc(db, "artifacts", appId, "public/data/rooms", roomId);
             const roomSnap = await getDoc(roomRef);
 
@@ -452,25 +665,25 @@
                 if (Object.keys(roomData.players).length < 2) {
                     currentRoomId = roomId;
                     const player2 = { id: userId, name: `Player ${Math.floor(Math.random() * 1000)}`, score: 0, isHost: false };
-                    
+
                     await updateDoc(roomRef, { [`players.${userId}`]: player2 });
                     listenToRoomUpdates(roomId);
                     showScreen('lobby-screen');
                 } else {
-                    alert('Room is full!');
+                    console.error('Room is full!');
                 }
             } else {
-                alert('Room not found!');
+                console.error('Room not found!');
             }
         }
-        
+
         function listenToRoomUpdates(roomId) {
             const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
             if (roomUnsubscribe) roomUnsubscribe();
             const roomRef = doc(db, "artifacts", appId, "public/data/rooms", roomId);
             roomUnsubscribe = onSnapshot(roomRef, (doc) => {
                 if (!doc.exists()) {
-                    alert("The host has left the game.");
+                    console.error("The host has left the game.");
                     resetToHome();
                     return;
                 }
@@ -478,9 +691,9 @@
                 const roomData = doc.data();
                 const amIHost = roomData.players[userId]?.isHost;
 
-                switch(roomData.gameState) {
+                switch (roomData.gameState) {
                     case 'waiting':
-                        updateLobbyUI(Object.values(roomData.players), amIHost);
+                        updateLobbyUI(roomData);
                         break;
                     case 'starting':
                         showScreen('game-screen');
@@ -498,12 +711,17 @@
             });
         }
 
-        function updateLobbyUI(players, isHost) {
-            lobbyCodeEl.textContent = currentRoomId;
+        function updateLobbyUI(roomData) {
+            const players = Object.values(roomData.players);
+            const isHost = roomData.players[userId]?.isHost;
+            lobbyCodeEl.innerHTML = `<span>${currentRoomId}</span> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
             playerListEl.innerHTML = '';
             players.forEach(p => {
                 const li = document.createElement('li');
-                li.textContent = `${p.name} ${p.id === userId ? '(You)' : ''} ${p.isHost ? '👑' : ''}`;
+                li.innerHTML = `
+                    <span>${p.name} ${p.id === userId ? `<span class="text-cyan-400">${translations[currentLang].you}</span>` : ''}</span>
+                    <span class="text-amber-400 text-2xl">${p.isHost ? translations[currentLang].host : ''}</span>
+                `;
                 playerListEl.appendChild(li);
             });
 
@@ -511,34 +729,42 @@
             const waitingMsg = document.getElementById('waiting-message');
             const waitingForHostMsg = document.getElementById('waiting-for-host-msg');
             const lobbyStartBtn = document.getElementById('start-game-from-lobby-btn');
-            
+
             if (isHost) {
                 hostControls.classList.remove('hidden');
                 waitingMsg.classList.add('hidden');
                 waitingForHostMsg.classList.add('hidden');
                 lobbyStartBtn.disabled = players.length < 2;
-                lobbyStartBtn.textContent = players.length < 2 ? 'Start Game (Need 2 players)' : 'Proceed to Settings';
+                lobbyStartBtn.textContent = players.length < 2 ? translations[currentLang].startGameNeed2 : translations[currentLang].proceedToSettings;
             } else {
                 hostControls.classList.add('hidden');
                 waitingMsg.classList.add('hidden');
                 waitingForHostMsg.classList.remove('hidden');
             }
         }
-        
+
         async function generateAndSetNewQuestion(roomData) {
             const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
             clearTimers();
             loaderGame.classList.remove('hidden');
             gameContent.style.display = 'none';
 
-            const prompt = `Generate a single, challenging trivia question about general knowledge. Return ONLY a valid JSON object with "question" (string) and "answer" (string) keys.`;
-            const responseText = await callGemini(prompt);
-            
-            if (!responseText) {
-                 questionTextEl.textContent = "Error loading question. Host may need to try again.";
-                 return;
+            let category = roomData.gameSettings.category;
+            if (category === 'Random') {
+                const categories = ['Math', 'History', 'Science', 'General Knowledge'];
+                category = categories[Math.floor(Math.random() * categories.length)];
             }
-            
+            gameCategoryEl.textContent = category;
+
+            const languageName = languageMap[currentLang] || 'English';
+            const prompt = `Generate a single, challenging trivia question about ${category} in ${languageName}. Return ONLY a valid JSON object with "question" (string) and "answer" (string) keys, both translated to ${languageName}.`;
+            const responseText = await callGemini(prompt);
+
+            if (!responseText) {
+                questionTextEl.textContent = translations[currentLang].errorLoadingQuestion;
+                return;
+            }
+
             try {
                 const cleanedText = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
                 const questionData = JSON.parse(cleanedText);
@@ -550,16 +776,17 @@
                     gameState: 'active',
                     currentQuestion: questionData,
                     questionNumber: questionNumber,
-                    answers: {}, 
-                    roundEndTime: Date.now() + 10000 // 10 second timer
+                    answers: {},
+                    roundEndTime: Date.now() + 10000
                 });
 
-            } catch(e) {
-                console.error("Failed to parse Gemini response:", e);
-                generateAndSetNewQuestion(roomData); // Retry
+            } catch (e) {
+                console.error("Failed to parse Gemini response:", e, responseText);
+                // Retry if parsing fails
+                generateAndSetNewQuestion(roomData);
             }
         }
-        
+
         function updateGameUI(roomData) {
             clearTimers();
             loaderGame.classList.add('hidden');
@@ -569,31 +796,38 @@
             answerInput.value = '';
             answerInput.disabled = false;
             submitAnswerBtn.disabled = false;
-            
+
             const players = Object.values(roomData.players);
             const p1 = players.find(p => p.isHost) || {};
             const p2 = players.find(p => !p.isHost) || { name: 'Waiting...', score: 0 };
-            
+
             document.getElementById('player1-info').style.visibility = 'visible';
             document.getElementById('player2-info').style.visibility = 'visible';
-            document.getElementById('player1-info').style.margin = '';
 
-            document.getElementById('player1-name').textContent = `${p1.name} ${p1.id === userId ? '(You)' : ''}`;
-            document.getElementById('player1-score').textContent = `Score: ${p1.score}`;
-            document.getElementById('player2-name').textContent = `${p2.name} ${p2.id === userId ? '(You)' : ''}`;
-            document.getElementById('player2-score').textContent = `Score: ${p2.score}`;
-            
+            document.getElementById('player1-name').textContent = `${p1.name} ${p1.id === userId ? translations[currentLang].you : ''}`;
+            document.getElementById('player1-score').textContent = `${translations[currentLang].score}: ${p1.score}`;
+            document.getElementById('player2-name').textContent = `${p2.name} ${p2.id === userId ? translations[currentLang].you : ''}`;
+            document.getElementById('player2-score').textContent = `${translations[currentLang].score}: ${p2.score}`;
+
             questionTextEl.textContent = roomData.currentQuestion.question;
+            gameCategoryEl.textContent = roomData.gameSettings.category;
 
             if (roomData.answers && roomData.answers[userId]) {
                 answerInput.disabled = true;
                 submitAnswerBtn.disabled = true;
-                feedbackMessage.textContent = 'Waiting for other player...';
+                feedbackMessage.textContent = translations[currentLang].waitingForOtherPlayer;
             }
 
             timerInterval = setInterval(() => {
                 const timeLeft = Math.round((roomData.roundEndTime - Date.now()) / 1000);
                 timerEl.textContent = timeLeft > 0 ? timeLeft : '0';
+                if (timeLeft <= 3) {
+                    timerEl.classList.add('text-red-500');
+                    timerEl.style.setProperty('--glow-color', "theme('colors.red.500/0.7')");
+                } else {
+                    timerEl.classList.remove('text-red-500');
+                    timerEl.style.setProperty('--glow-color', "theme('colors.amber.500/0.7')");
+                }
                 if (timeLeft <= 0) {
                     clearTimers();
                     answerInput.disabled = true;
@@ -603,7 +837,7 @@
                     }
                 }
             }, 500);
-            
+
             if (roomData.players[userId]?.isHost) {
                 const totalPlayers = players.length;
                 const submittedAnswers = roomData.answers ? Object.keys(roomData.answers).length : 0;
@@ -616,10 +850,11 @@
 
         async function scoreMultiplayerRound(roomData) {
             const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+            // Prevent multiple scoring calls
             if (roomData.gameState !== 'active') return;
-            
+
             const roomRef = doc(db, "artifacts", appId, "public/data/rooms", currentRoomId);
-            await updateDoc(roomRef, { gameState: 'scoring' });
+            await updateDoc(roomRef, { gameState: 'scoring' }); // Intermediate state
 
             const batch = writeBatch(db);
             const currentPlayers = roomData.players;
@@ -635,23 +870,23 @@
             });
 
             await batch.commit();
-            
-            const updatedRoomSnap = await getDoc(roomRef);
-            const updatedRoomData = updatedRoomSnap.data();
 
-            const settings = updatedRoomData.gameSettings;
-            if (settings.mode === 'questions' && updatedRoomData.questionNumber >= settings.value) {
-                await updateDoc(roomRef, { gameState: 'finished' });
-            } else {
-                setTimeout(() => {
-                    if(updatedRoomData.players[userId]?.isHost) {
-                       generateAndSetNewQuestion(updatedRoomData);
+            // Short delay to show results before next question or game over
+            setTimeout(async () => {
+                const updatedRoomSnap = await getDoc(roomRef);
+                const updatedRoomData = updatedRoomSnap.data();
+
+                const settings = updatedRoomData.gameSettings;
+                if (settings.mode === 'questions' && updatedRoomData.questionNumber >= settings.value) {
+                    await updateDoc(roomRef, { gameState: 'finished' });
+                } else {
+                    // Host generates the next question
+                     if (updatedRoomData.players[userId]?.isHost) {
+                        generateAndSetNewQuestion(updatedRoomData);
                     }
-                }, 3000);
-            }
+                }
+            }, 3000); // 3-second pause
         }
-        
-        // --- Single Player Logic ---
 
         function startSinglePlayerGame() {
             singlePlayerState = {
@@ -659,12 +894,15 @@
                 questionsAsked: 0,
                 lives: gameSettings.mode === 'survival' ? 3 : Infinity
             };
-            
+
             showScreen('game-screen');
             document.getElementById('player2-info').style.visibility = 'hidden';
-            document.getElementById('player1-info').style.margin = '0 auto';
-            document.getElementById('player1-name').textContent = `Mode: ${gameSettings.mode}`;
-            
+            const p1Info = document.getElementById('player1-info');
+            p1Info.classList.add('mx-auto');
+            p1Info.classList.remove('w-2/5');
+            p1Info.classList.add('w-4/5', 'max-w-sm');
+            document.getElementById('player1-name').textContent = `${translations[currentLang].gameMode}: ${translations[currentLang]['mode' + gameSettings.mode.charAt(0).toUpperCase() + gameSettings.mode.slice(1)]}`;
+
             getNextQuestion();
         }
 
@@ -672,10 +910,12 @@
             if (gameMode === 'single') {
                 getNewSinglePlayerQuestion();
             }
+            // Multiplayer next question is handled by the host in `scoreMultiplayerRound`
         }
 
         async function getNewSinglePlayerQuestion() {
             clearTimers();
+            showScreen('game-screen');
             loaderGame.classList.remove('hidden');
             gameContent.style.display = 'none';
             feedbackMessage.textContent = '';
@@ -686,34 +926,53 @@
 
             updateSinglePlayerUI();
 
-            const prompt = `Generate a single, challenging trivia question about general knowledge. Return ONLY a valid JSON object with "question" and "answer" keys.`;
+            let category = gameSettings.category;
+            if (category === 'Random') {
+                const categories = ['Math', 'History', 'Science', 'General Knowledge'];
+                category = categories[Math.floor(Math.random() * categories.length)];
+            }
+            gameCategoryEl.textContent = translations[currentLang]['cat' + category.replace(/\s/g, '')] || category;
+
+
+            const languageName = languageMap[currentLang] || 'English';
+            const prompt = `Generate a single, challenging trivia question about ${category} in ${languageName}. Return ONLY a valid JSON object with "question" (string) and "answer" (string) keys, both translated to ${languageName}.`;
             const responseText = await callGemini(prompt);
-            
+
             loaderGame.classList.add('hidden');
             gameContent.style.display = 'block';
 
-            if(responseText) {
+            if (responseText) {
                 try {
                     const cleanedText = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
                     const data = JSON.parse(cleanedText);
                     questionTextEl.textContent = data.question;
                     correctAnswer = data.answer;
                     startSinglePlayerTimer();
-                } catch(e) {
-                    questionTextEl.textContent = "Error loading question. Please try again.";
+                } catch (e) {
+                    questionTextEl.textContent = translations[currentLang].errorLoadingQuestion;
                     nextQuestionBtn.classList.remove('hidden');
                 }
+            } else {
+                 questionTextEl.textContent = translations[currentLang].errorLoadingQuestion;
+                 nextQuestionBtn.classList.remove('hidden');
             }
         }
-        
+
         function startSinglePlayerTimer() {
             let timeLeft = 10;
             timerEl.textContent = timeLeft;
             timerInterval = setInterval(() => {
                 timeLeft--;
                 timerEl.textContent = timeLeft;
+                 if (timeLeft <= 3) {
+                    timerEl.classList.add('text-red-500');
+                    timerEl.style.setProperty('--glow-color', "theme('colors.red.500/0.7')");
+                } else {
+                    timerEl.classList.remove('text-red-500');
+                    timerEl.style.setProperty('--glow-color', "theme('colors.amber.500/0.7')");
+                }
                 if (timeLeft <= 0) {
-                    checkSinglePlayerAnswer(true); // Time's up
+                    checkSinglePlayerAnswer(true);
                 }
             }, 1000);
         }
@@ -724,7 +983,7 @@
             } else if (gameMode === 'friends' && currentRoomId) {
                 const answerText = answerInput.value.trim();
                 if (!answerText) return;
-                
+
                 const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
                 const roomRef = doc(db, "artifacts", appId, "public/data/rooms", currentRoomId);
                 updateDoc(roomRef, { [`answers.${userId}`]: answerText });
@@ -737,80 +996,175 @@
             clearTimers();
             const userAnswer = answerInput.value.trim().toLowerCase();
             const isCorrect = !isTimeUp && userAnswer === correctAnswer.toLowerCase().trim();
-            
+
             answerInput.disabled = true;
             submitAnswerBtn.disabled = true;
-            singlePlayerState.questionsAsked++;
-
+            
             if (isCorrect) {
                 singlePlayerState.score += 10;
-                feedbackMessage.textContent = "Correct! 🎉";
-                feedbackMessage.className = 'text-center text-2xl font-bold mt-6 text-green-400';
-            } else if (isTimeUp) {
-                singlePlayerState.lives--;
-                feedbackMessage.textContent = `Time's up! The answer was: ${correctAnswer}`;
-                feedbackMessage.className = 'text-center text-2xl font-bold mt-6 text-red-400';
+                singlePlayerState.questionsAsked++;
+                feedbackMessage.textContent = translations[currentLang].correctFeedback;
+                feedbackMessage.className = 'text-center text-2xl font-bold mt-6 feedback-correct';
+                updateSinglePlayerUI();
+                continueOrEndSinglePlayerGame();
             } else {
-                singlePlayerState.lives--;
-                feedbackMessage.textContent = `Incorrect. The answer was: ${correctAnswer}`;
-                feedbackMessage.className = 'text-center text-2xl font-bold mt-6 text-red-400';
+                // Incorrect answer, trigger second chance
+                if (gameSettings.mode === 'survival') {
+                    singlePlayerState.lives--;
+                }
+                singlePlayerState.questionsAsked++;
+                updateSinglePlayerUI();
+                showSecondChance(correctAnswer);
             }
-            
-            updateSinglePlayerUI();
+        }
 
-            questionTimeout = setTimeout(() => {
+        async function showSecondChance(correctAnswer) {
+            showScreen('second-chance-screen');
+            const optionsContainer = document.getElementById('second-chance-options');
+            const loader = document.getElementById('second-chance-loader');
+            const feedbackEl = document.getElementById('second-chance-feedback');
+
+            optionsContainer.innerHTML = '';
+            optionsContainer.classList.add('hidden');
+            loader.classList.remove('hidden');
+            feedbackEl.textContent = '';
+
+            const languageName = languageMap[currentLang] || 'English';
+            const prompt = `The correct answer to a trivia question is "${correctAnswer}". Generate three plausible but incorrect alternative answers for a multiple-choice question in the ${languageName} language. Return ONLY a valid JSON array of strings. Example: ["distractor1", "distractor2", "distractor3"]`;
+            const responseText = await callGemini(prompt);
+
+            loader.classList.add('hidden');
+            optionsContainer.classList.remove('hidden');
+
+            let choices = [correctAnswer];
+            if (responseText) {
+                try {
+                    const distractors = JSON.parse(responseText.replace(/```json/g, '').replace(/```/g, '').trim());
+                    choices.push(...distractors);
+                } catch (e) {
+                    console.error("Failed to parse distractors", e);
+                    // fallback distractors
+                    choices.push("Option A", "Option B", "Option C");
+                }
+            }
+
+            // Shuffle choices
+            for (let i = choices.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [choices[i], choices[j]] = [choices[j], choices[i]];
+            }
+
+            choices.slice(0, 4).forEach(choice => {
+                const btn = document.createElement('button');
+                btn.className = 'btn btn-gray';
+                btn.textContent = choice;
+                btn.onclick = (e) => handleSecondChanceSelection(e.target, choice, correctAnswer);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function handleSecondChanceSelection(button, selectedAnswer, correctAnswer) {
+            const feedbackEl = document.getElementById('second-chance-feedback');
+            const optionsContainer = document.getElementById('second-chance-options');
+            // Disable all buttons
+            optionsContainer.querySelectorAll('button').forEach(btn => btn.disabled = true);
+
+            if (selectedAnswer.toLowerCase().trim() === correctAnswer.toLowerCase().trim()) {
+                singlePlayerState.score += 20;
+                feedbackEl.textContent = translations[currentLang].secondChanceCorrect;
+                feedbackEl.className = 'text-2xl font-bold mt-6 feedback-correct';
+                button.classList.remove('btn-gray');
+                button.classList.add('btn-success');
+            } else {
+                singlePlayerState.score = Math.max(0, singlePlayerState.score - 10); // Score can't go below 0
+                feedbackEl.textContent = translations[currentLang].secondChanceIncorrect;
+                feedbackEl.className = 'text-2xl font-bold mt-6 feedback-incorrect';
+                button.classList.remove('btn-gray');
+                button.classList.add('btn-danger');
+                // Highlight the correct answer
+                optionsContainer.querySelectorAll('button').forEach(btn => {
+                    if (btn.textContent.toLowerCase().trim() === correctAnswer.toLowerCase().trim()) {
+                        btn.classList.remove('btn-gray');
+                        btn.classList.add('btn-success');
+                    }
+                });
+            }
+
+            updateSinglePlayerUI();
+            continueOrEndSinglePlayerGame();
+        }
+
+        function continueOrEndSinglePlayerGame() {
+             questionTimeout = setTimeout(() => {
                 if (gameSettings.mode === 'survival' && singlePlayerState.lives <= 0) {
-                    endSinglePlayerGame("You ran out of lives!");
+                    endSinglePlayerGame(translations[currentLang].youRanOutOfLives);
                 } else if (gameSettings.mode === 'questions' && singlePlayerState.questionsAsked >= gameSettings.value) {
-                    endSinglePlayerGame("You completed all questions!");
+                    endSinglePlayerGame(translations[currentLang].completedAllQuestions);
                 } else {
+                    // Go back to game screen and get next question
+                    showScreen('game-screen');
                     nextQuestionBtn.classList.remove('hidden');
                 }
-            }, 2000);
+            }, 2500);
         }
 
         function updateSinglePlayerUI() {
-             let scoreText = `Score: ${singlePlayerState.score}`;
-             if(gameSettings.mode === 'survival') {
-                 scoreText += ` | Lives: ${singlePlayerState.lives > 0 ? '❤️'.repeat(singlePlayerState.lives) : '💀'}`;
-             } else if (gameSettings.mode === 'questions') {
-                 scoreText += ` | Q: ${singlePlayerState.questionsAsked + 1} / ${gameSettings.value}`;
-             }
-             document.getElementById('player1-score').textContent = scoreText;
+            let scoreText = `${translations[currentLang].score}: ${singlePlayerState.score}`;
+            if (gameSettings.mode === 'survival') {
+                scoreText += ` | ${translations[currentLang].lives}: ${singlePlayerState.lives > 0 ? '❤️'.repeat(singlePlayerState.lives) : '💀'}`;
+            } else if (gameSettings.mode === 'questions') {
+                scoreText += ` | ${translations[currentLang].question}: ${singlePlayerState.questionsAsked} / ${gameSettings.value}`;
+            }
+            document.getElementById('player1-score').textContent = scoreText;
         }
 
         function endSinglePlayerGame(message) {
             clearTimers();
             document.getElementById('game-over-message').textContent = message;
             const finalScoresEl = document.getElementById('final-scores');
-            finalScoresEl.innerHTML = `<p>Your Final Score: ${singlePlayerState.score}</p>`;
+            finalScoresEl.innerHTML = `<p>${translations[currentLang].yourFinalScore} <span class="text-amber-400 font-bold">${singlePlayerState.score}</span></p>`;
             showScreen('game-over-screen');
+            triggerConfetti();
         }
-
-        // --- General Game Flow ---
 
         function showGameOver(roomData) {
             clearTimers();
-            if(roomUnsubscribe) roomUnsubscribe();
-            
+            if (roomUnsubscribe) roomUnsubscribe();
+
             const finalScoresEl = document.getElementById('final-scores');
             finalScoresEl.innerHTML = '';
-            const players = Object.values(roomData.players).sort((a,b) => b.score - a.score);
+            const players = Object.values(roomData.players).sort((a, b) => b.score - a.score);
             const winner = players[0];
             const isTie = players.length > 1 && players[0].score === players[1].score;
-            
+
             const title = document.getElementById('game-over-message');
-            title.textContent = isTie ? "It's a tie!" : `${winner.name} wins!`;
+            title.textContent = isTie ? translations[currentLang].itsATie : `${winner.name} ${translations[currentLang].playerWins}`;
 
             players.forEach(p => {
                 const scoreLine = document.createElement('div');
-                scoreLine.textContent = `${p.name}: ${p.score} points`;
+                scoreLine.innerHTML = `${p.name}: <span class="font-bold text-amber-400">${p.score}</span> ${currentLang === 'ar' ? 'نقاط' : 'points'}`;
                 finalScoresEl.appendChild(scoreLine);
             });
 
             showScreen('game-over-screen');
+            if (!isTie) {
+                triggerConfetti();
+            }
         }
         
+        function triggerConfetti() {
+            confettiContainer.innerHTML = '';
+            const colors = ['#06b6d4', '#3b82f6', '#f59e0b', '#ef4444', '#22c55e'];
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = `${Math.random() * 100}vw`;
+                confetti.style.animationDelay = `${Math.random() * 5}s`;
+                confetti.style.setProperty('--color', colors[Math.floor(Math.random() * colors.length)]);
+                confettiContainer.appendChild(confetti);
+            }
+        }
+
         function clearTimers() {
             clearInterval(timerInterval);
             clearTimeout(questionTimeout);
@@ -820,52 +1174,55 @@
 
         async function resetToHome() {
             clearTimers();
+            confettiContainer.innerHTML = '';
             if (roomUnsubscribe) {
                 roomUnsubscribe();
                 roomUnsubscribe = null;
             }
-            if(currentRoomId) {
+            if (currentRoomId) {
                 const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
                 const roomRef = doc(db, "artifacts", appId, "public/data/rooms", currentRoomId);
                 const roomSnap = await getDoc(roomRef);
-                if(roomSnap.exists()) {
+                if (roomSnap.exists()) {
                     const isHost = roomSnap.data().players[userId]?.isHost;
-                    if(isHost) {
-                       await deleteDoc(roomRef);
+                    if (isHost) {
+                        await deleteDoc(roomRef);
                     }
                 }
             }
             currentRoomId = null;
             gameMode = null;
-            gameSettings = { mode: null, value: null };
+            gameSettings = { mode: null, value: null, category: 'General Knowledge' };
             singlePlayerState = {};
             timerEl.textContent = '10';
             showScreen('home-screen');
         }
 
-        // --- Initial Load ---
         async function startApp() {
             const success = await initializeFirebase();
             if (success) {
                 setupListeners();
+                const savedLang = localStorage.getItem('gameLanguage') || 'en';
+                setLanguage(savedLang);
                 showScreen('home-screen');
             }
         }
 
+        // Wait for Firebase config to be available
         const checkInterval = setInterval(() => {
-            // Wait for the platform to inject the config and token
             if (typeof __firebase_config !== 'undefined' && typeof __initial_auth_token !== 'undefined') {
                 clearInterval(checkInterval);
                 startApp();
             }
-        }, 100); // Check every 100ms
+        }, 100);
 
         window.addEventListener('beforeunload', (event) => {
             if (currentRoomId) {
-                resetToHome(); 
+                resetToHome();
             }
         });
 
     </script>
 </body>
 </html>
+
